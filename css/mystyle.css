@@ -54,10 +54,12 @@
         }
 
         .todoHeader h1{
-            color: #dec6c6;
-            font-size: 60px;
+            color: #c77373;
+            font-size: 5rem;
             text-align: center;
             height: 40px;
+            text-shadow: 5px 5px 5px #9c7575;
+            line-height: 20px;
         }
 
         .todoHeader input{

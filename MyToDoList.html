@@ -3,7 +3,7 @@
 <head>
 	<title>To Do MVC</title> 
 	<script src="libs/vue.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
 </head>
 <body class="app"> 
 
@@ -54,13 +54,28 @@
 		var todoStorage = {
 			storage_key: 'fangfang_todolist_vuelearning2.0',
 
+			hasLocalStorage : !!function(v){
+					try{
+						with(localStorage)
+						return setItem(v,v)|!removeItem(v)
+					}
+					catch(e){}
+			}('_'),
+
 			fetch: function(){
-				var todos = JSON.parse(localStorage.getItem(this.storage_key) || '[]'); 
+				var todos = [];
+ 
+				if(this.hasLocalStorage){
+					todos = JSON.parse(localStorage.getItem(this.storage_key) || '[]'); 
+				} 
+				
 				return todos;
 			},
 
 			save: function(todos){
-				localStorage.setItem(this.storage_key, JSON.stringify(todos));
+				if(this.hasLocalStorage){
+					localStorage.setItem(this.storage_key, JSON.stringify(todos));
+				} 
 			}
 
 		};

@@ -1,0 +1,50 @@
+
+/*using label for checkbox*/
+.fckbox{
+
+}
+
+.fckbox{
+	display: none;
+}
+
+.fckbox + label{
+	background-color: #FFF;
+	border: 1px solid #C1CACA;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+	padding: 9px;
+	border-radius: 10px;
+    display: inline-block;
+    margin-right: 10px;
+	position: relative;
+	margin-bottom: -3px;
+}
+
+.fckbox + label:active{
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1); 
+} 
+
+.fckbox:checked + label { 
+ 	background-color: #ECF2F7; 
+    border: 1px solid #92A1AC; 
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1); 
+    color: #243441; 
+} 
+
+.fckbox:checked + label:after { 
+    content: '\2713'; 
+    position: absolute; 
+    top: 0px; 
+    left: 0px; 
+    color: #758794; 
+    width: 100%; 
+    text-align: center; 
+    font-size: 0.6em; 
+    padding: 1px 0 0 0; 
+    vertical-align: text-top; 
+} 
+
+
+
+
+

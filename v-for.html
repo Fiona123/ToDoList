@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>	V-For </title>
+	<script type="text/javascript" src="libs/vue.js"></script>
+</head>
+<body>
+
+	<div id="ex1"> 
+		{{data1}} 
+		</br>
+		</br>
+		<ul>
+		[v-for in array]: </br> 
+			<li v-for="(item, index) in items" :key="index">{{item}} +"-"+{{index}}</li></br></br>
+		[v-for in Computed Data Or Method]: </br>
+			<li v-for="item in evenNumbers" :key="index">{{item}}</li></br></br>
+		[v-for in object]: </br>
+			<li v-for="(value, key, index) in obj">{{value}} + "-" + {{key}} + "-" +{{index}}</li>
+		</ul> 
+ 		
+ 		</br>
+ 		</br>
+ 		[V-for with template] </br>
+ 		<ul>
+		  <template v-for="item in items">
+		    <li>{{ item }}</li>
+		    <li class="divider"></li>
+		  </template>
+		</ul>
+
+		</br>
+		</br>
+		[V-for with numbers]</br>
+
+ 		<span v-for="n in 10">{{ n }} </span>
+ 	<div>
+ 
+
+	<script type="text/javascript">
+		var vm = new Vue({
+			el: "#ex1",
+			data: {
+				items: [1, 2, 3],
+				obj: {
+					firstname: "fangfang",
+					lastname:"li",
+					fullname: "fangfang li"
+				}
+			},
+			computed:{
+				evenNumbers: function(){
+					return this.items.filter(function(value){
+						return value % 2 == 0;
+					})
+				}
+			}
+		});
+		vm.items.push(6);
+
+		
+
+		/*
+			数组属性
+		*/ 
+		//在渲染过后
+		//below two operations will not work 
+		//	vm.items[0] = "a1";
+		//	vm.items.length = 6; 
+
+		//Update by index with below two methods:
+		Vue.set(vm.items, 1, 4);
+		vm.items.splice(2, 1, 5);
+		//Set length of the array with below method:
+		vm.items.splice(7);
+		
+
+		/*
+			对象属性
+		*/
+		//后添加的属性不是响应式属性
+		vm.data1 = "dd";
+		vm.obj.attr1 = "attr1";
+
+		//添加或设置一个响应式属性
+		Vue.set(vm.obj, "insert_attr", "newValue");
+		vm.$set(vm.obj, "insert_by_instance_method", "newValue");
+
+		//为对象添加响应式数组必须替换掉原来的整个对象。 
+		vm.obj = Object.assign({}, vm.obj, {
+		  age: 27,
+		  favoriteColor: 'Vue Green'
+		})
+
+	</script>
+
+</body>
+</html>

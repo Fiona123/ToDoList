@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Component</title>
+	<script type="text/javascript" src="libs/vue.js"></script>
+</head>
+<body> 
+
+	<div id="todolist">
+		<input placeholder='Create a new to do item' v-model='newItem.text' v-on:change="addItem"></input>
+	<!-- 	<ul>
+			 
+			<li is='todo-item' v-for='item in todolist' :text="item.text" :priority='item.priority' 
+			:is-finished='item.isFinished'></li>
+			 
+			<li is='todo-item' v-for='item in todolist' v-bind='item'></li>
+		</ul> -->
+
+		<todo-list :items='todolist'></todo-list>
+	</div>
+
+	
+	<script type="text/javascript">
+
+		Vue.component('todo-item',{
+			props:{
+				text: {
+					type: String,
+					required: true
+				},
+				deadline: {
+					type: Object,
+					default: new Date()
+				},
+				priority: {
+					validator: function(value){
+						return value === 'H' || value === 'M' || value == 'L'
+ 					}
+				},
+				isFinished: {
+					type: Boolean,
+					default: false
+				}
+			},
+			data: function(){
+				return {
+					itemFinished: this.isFinished
+				};
+			}, 
+			computed:{
+				dueDate: function(){
+					return this.deadline.getFullYear() + ":" + (this.deadline.getMonth()+1) +":" + (this.deadline.getDay()+1);
+				}
+			},
+
+			template: "<li><input type='checkbox'></input>Todo:{{text}} - {{priority}} - {{dueDate}}</li>"
+		});
+
+		Vue.component('todo-list',{
+			props: {
+				 items: Object 
+			},
+			template: "<ul><li is='todo-item' v-for='item in items' v-bind='item'></li></ul>" 
+		});
+
+		var vm = new Vue({
+			el:"#todolist",
+			data: {
+				todolist:[
+					{text: "TO item 1", deadline: new Date(), priority: 'High', isFinished: false},
+					{text: "to do item 2", deadline: new Date(), priority: 'High', isFinished: true} 
+				],
+				newItem: {text: "", deadline: new Date(), priority: 'High', isFinished: true} 
+			},
+			methods: {
+				addItem: function(){
+					this.todolist.push(this.newItem);
+					this.newItem = {text: "", deadline: new Date(), priority: 'High', isFinished: true} ;
+				}
+			}		
+		});
+
+
+	</script>
+  
+
+</body>
+</html>

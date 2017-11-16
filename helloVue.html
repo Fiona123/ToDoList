@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue.JS Learning</title>
+	<script type="text/javascript" src="libs/vue.js"></script>
+</head>
+<body>
+
+<!-- 属性，计算属性，方法，表达式-->
+	<div>
+		<p id='p1' v-if='vis'>
+			{{message}} </br>
+		    表达式:{{ message.split('').reverse().join('') }} </br>
+			属性计算：{{reversedMessage}} </br>
+			方法：{{ revertMessage() }} </br>
+			观察属性: {{reversedMsg}} </br>
+			计算属性set fullName: {{fullName}} - {{firstName}}+{{lastName}}
+		</p> 
+
+	</div>
+
+	<script type="text/javascript">
+		
+		var vm = new Vue({
+			el: '#p1',
+			data:{
+				message: 'hello vue.js',
+				reversedMsg: '',
+				vis: true,  
+				fullName: '',
+				firstName: 'fangfang',
+				lastName: 'li'
+			},
+			//计算属性
+			computed:{ 
+				//计算属性是根据依赖关系进行缓存的，只有依赖的属性变化时，才会重新计算。因此，访问计算属性时，可以马上得到缓存的值,而method方法每次都要计算。
+				reversedMessage: function(){
+					return this.message.split('').reverse().join('');
+				},
+
+				fullName:{
+				//计算属性默认只有get,也可以设置set. 
+					get: function(){
+						return this.firstName + ' ' + this.lastName
+					},
+					set: function(newName){
+						var names = newValue.split(' ')
+				      	this.firstName = names[0]
+				      	this.lastName = names[names.length - 1]
+					}
+				}
+			},
+			methods:{
+
+				//reversedMessage这种属性依赖，最好使用计算属性。
+			 	revertMessage: function () {
+				   return this.message.split('').reverse().join('')
+				},
+
+				//需要实时计算的值用method
+				now: function(){
+					return new Date();
+				}
+			},
+			//观察者 - 适用范围：在属性变化时，执行异步操作或开销较大的操作
+			watch:{
+				message: function(val){
+					this.reversedMsg = this.message.split('').reverse().join('');
+				} 
+			}
+		})
+
+		vm.message = "hello V";
+		vm.fullName = 'John Doe';
+
+	</script>
+
+<!-- 观察者 -->
+	<div id="watch-example">
+		<p>
+		   	Ask a yes/no question:
+		    <input v-model="question">
+		</p>
+		<p>{{ answer }}</p>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+	<script>
+	var watchExampleVM = new Vue({
+	  	el: '#watch-example',
+	  	data: {
+	   	 	question: '',
+	   		answer: 'I cannot give you an answer until you ask a question!'
+	  	},
+	  	watch: {
+	    	// 如果 question 发生改变，这个函数就会运行
+	    	question: function (newQuestion) {
+	     	 	this.answer = 'Waiting for you to stop typing...'
+	      		this.getAnswer()
+	    	}
+	  	},
+	  	methods: {
+	    // _.debounce 是一个通过 lodash 限制操作频率的函数。
+	    // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+	    // ajax 请求直到用户输入完毕才会发出
+	    // 学习更多关于 _.debounce function (and its cousin
+	    // _.throttle)，参考：https://lodash.com/docs#debounce
+	    getAnswer: _.debounce(
+	      	function () {
+	        	if (this.question.indexOf('?') === -1) {
+	          		this.answer = 'Questions usually contain a question mark. ;-)'
+	          		return
+	        	}
+	        	this.answer = 'Thinking...'
+	        	var vm = this
+	        	axios.get('https://yesno.wtf/api')
+	          		.then(function (response) {
+	            	vm.answer = _.capitalize(response.data.answer)
+	          	})
+	          	.catch(function (error) {
+	           	 	vm.answer = 'Error! Could not reach the API. ' + error
+	          	})
+	      	},
+	      	// 这是我们为用户停止输入等待的毫秒数
+	      	500
+	    )
+	  }
+	})
+	</script>
+
+<!-- 绑定class -->
+	  
+	<div id="cssExample" v-bind:style="styleObject" v-bind:style='styleObject'>Text</div>
+	 
+
+	<script type="text/javascript">
+		var cssEx = new Vue({
+			el: '#cssExample',
+			data: {
+				classObject:{ 
+   				   	font-size: 30
+				},
+				styleObject:{
+					color: 'red',
+					fontSize: '13px'
+				}
+			}
+		});
+	</script>
+	
+
+</body>
+</html>

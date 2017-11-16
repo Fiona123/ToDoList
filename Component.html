@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Component</title>
+	<script type="text/javascript" src="libs/vue.js"></script>
+</head>
+<body> 
+
+	<div id="example4">
+		<my-component></my-component>
+		</br>
+		Is My Option: </br>
+		<select>
+			<option>A</option>
+		    <option>B</option>	
+		    <option>C</option>
+		    <option is='my-option'></option> 
+		</select>
+
+	</div>
+
+	
+	<script type="text/javascript">
+
+		Vue.component('my-component', {
+			template: '<div> hello my component </div> '
+		});
+
+		Vue.component('my-option',{
+			template: '<option>D</option>'
+		});
+
+		var vm = new Vue({
+			el: '#example4'
+		}); 
+
+	</script>
+  
+
+</body>
+</html>

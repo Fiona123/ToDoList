@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>To Do MVC</title>
+
+	<script src="libs/vue.js"></script>
+	<style type="text/css">
+		.app{
+			background-color: #f1f0f0;
+			width: 80%;
+			position: absolute;
+			left: 10%;
+		}
+
+		.todoHeader h1{
+			color: #dec6c6;
+			font-size: 60px;
+			text-align: center;
+			height: 40px;
+		}
+
+		.todoHeader input{
+			width: 100%;
+		    font-size: 18px;
+		    font-weight: lighter;
+		    font-style: italic;
+		    line-height: 35px;
+		    border-radius: 4px;
+		    border: 1px solid #ccc;
+		    box-shadow: 0 0 5px #ccc;
+		    outline: none;
+		    padding-left: 40px;
+		}
+ 
+		.todolistul li{
+			list-style: none;
+			margin-left: -30px;
+			border-bottom: 0.5px solid #d4cfcf;
+			padding: 10px 0;
+		}
+
+		.todolistul li:last-child{ 
+	/*		border-bottom: 0;*/
+		}
+
+		.todoitem{
+
+		}
+
+		.todoitem label{
+			color: #484747;
+		}
+
+		.finishitem{
+
+		}
+
+		.finishitem label{
+			text-decoration: line-through;
+			color: #ccc;
+		}
+
+		.ckbox{
+			display: none;
+		}
+
+		.ckbox + label{
+			background-color: #FFF;
+		    border: 1px solid #C1CACA;
+		    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+		    padding: 9px;
+		    border-radius: 10px;
+		    display: inline-block;
+		    margin-right: 10px;
+		    position: relative;
+		    margin-bottom: -3px;
+		}
+
+		.ckbox + label:active{
+			box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1); 
+		} 
+
+		.ckbox:checked + label { 
+		    background-color: #ECF2F7; 
+		    border: 1px solid #92A1AC; 
+		    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1); 
+		    color: #243441; 
+		} 
+
+		.ckbox:checked + label:after { 
+		
+		    position: absolute; 
+		    top: 0px; 
+		    left: 0px; 
+		    color: #758794; 
+		    width: 100%; 
+		    text-align: center; 
+		    font-size: 0.6em; 
+		    padding: 1px 0 0 0; 
+		    vertical-align: text-top; 
+		} 
+
+		.ckboxicon1:checked + label:after { 
+		    content: '\2713';  
+		} 
+
+		.ckboxicon2:checked + label:after  { 
+		    content: '\1817';  
+		} 
+
+		.todolistul li button { 
+			/*background-color:yellow;*/
+			display: none;
+			float: right;
+		}
+
+		.todolistul li:hover button{ 
+			display: inline;
+			float: right;  
+ 
+		} 
+
+		.mybutton{  
+			outline: none;
+			margin-top: -3px; 
+		    background-color: #b9a69d;
+		    font-family: 'Open Sans', sans-serif;
+		    font-size: 12px;
+		    text-decoration: none;
+		    color: #4c4a4a;
+		    position: relative;
+		 
+			border-radius: 5px;
+    		box-shadow: inset 0px 1px 0px #9e8d84, 0px 1px 0px 0px #796357, 0px 1px 0px #999;
+		} 
+
+		.mybutton:hover { 
+			box-shadow: inset 0px 2px 0px #9e8d84, 0px 2px 0px 0px #796357, 0px 2px 0px #999;
+		}
+
+
+		.deleteBt{  
+			background-color: #f1f0f0;
+			border: 0;
+			text-decoration:  underline;
+			font-size: 0.9em;
+			color: #d8b8b8;
+			font-weight: lighter;
+			outline: none;
+		} 
+
+		.deleteBt:hover { 
+
+			box-shadow: inset 0px 2px 0px #9e8d84, 0px 2px 0px 0px #796357, 0px 2px 0px #999;
+		}
+
+
+		.mychecklabel{
+
+		}
+		
+	
+		
+
+	/*	.todolistul li button:active {
+			top:3px;
+			background-image: linear-gradient(bottom, rgb(62,51,46) 100%, rgb(101,86,78) 0%);
+			box-shadow: inset 0px 1px 0px #9e8d84, 0px 2px 0px 0px #322620, 0px 5px 3px #999;
+		}
+
+		.todolistul li button:active::before {
+			top:50%;
+			margin-top:-12px;
+			box-shadow: inset 0px 1px 0px #827066, 0px 3px 0px #19120f, 0px 6px 3px #382e29;
+		}*/
+
+		.footer{
+			float: left;
+			width: 100%;
+			font-size: 0.9em;
+			color: #5d5b5b;
+			font-weight: lighter;
+		}
+
+		.footer span{
+			float: left;
+			font-size: 0.9em;
+			color: #5d5b5b;
+			font-weight: lighter;
+			width: 30%;
+		} 
+
+		.footer ul{
+			float: left;
+			list-style: none;
+			margin-top: -2px;	
+			width: 30%;	 
+		} 
+
+		.footer ul li{
+			float: left;
+			margin-left: 10px;
+		}
+
+	/*	.footer ul li a{
+			border-width: 10px;
+		    border-color: #b76a6a;
+		    margin-left: 10px;
+		    background-color: #e2d4d4;
+		    border-radius: 5px;
+		    padding: 0px 5px;
+		}  */
+
+
+		.footer span{
+			float: left;
+		} 
+
+		.footer a{
+			float: right;
+
+		} 
+
+		.footer a:hover{
+			text-decoration: underline;
+		} 
+
+
+		.filterBt{
+			border: 0;
+		    /*border-color: #b76a6a;*/
+		    /*margin-left: 10px;*/
+		    background-color: #e2d4d4;
+		    border-radius: 5px;
+		    padding: 2px 8px;
+		    font-size: 0.9em;
+			color: #5d5b5b;
+			font-weight: lighter;
+			outline: none;
+		}   
+
+		.filterBt:hover{
+			text-decoration: underline;
+		}   
+ 
+
+		.filteredBt{
+			background-color: #A96E6B;
+		}
+
+		.selectAllCkbox + label{
+			position: relative;
+		    top: -29px;
+		    left: 10px;
+		}
+		 
+
+	</style>
+</head>
+<body class="app"> 
+
+
+	<section id="todoapp">
+		<header class="todoHeader">
+			<h1>todos</h1>
+			<input v-model="newTodo" autofocus placeholder="What needs to do done?" @keyup.enter='addTodo'></input>
+		</header> 
+		<section id="main" v-show="todoList.length" >
+			<input :class=['ckbox','ckboxicon2','selectAllCkbox'] type="checkbox" id="selectAll" @change="selectAll($event.target.checked)"></input>
+			<label for="selectAll" ></label>
+			<ul class="todolistul">
+				<li v-for="(todo, index) in filterList">
+					<div :class="{'todoitem': true, 'finishitem': todo.completed}">
+						<input :id="index+'checkbox'" :class=['ckbox','ckboxicon1'] type="checkbox" v-model="todo.completed"></input>
+						<label :for="index+'checkbox'"></label>
+						<label>{{todo.title}}</label>
+						<button @click="removeItem(todo)" class="deleteBt">Clear</button>
+					</div>
+				</li>
+			</ul>
+		</section>
+		<footer class="footer" v-show="todoList.length">
+			<span>
+				<strong>{{remaining}}</strong> items left
+			</span>
+			<ul> 
+				<li>
+					<button @click="filterItem('all')" :class="{'filterBt':true, 'filteredBt':filter=='all'}">All</button>
+				<!-- 	<button @click="filterItem('all')">All</button> -->
+				</li>
+				<li>
+					<button @click="filterItem('active')" :class="{'filterBt':true, 'filteredBt':filter=='active'}">Active</button>
+				</li>
+				<li>
+					<button @click="filterItem('completed')" :class="{'filterBt':true, 'filteredBt':filter=='completed'}">Completed</button>
+				</li>
+				 
+			</ul>
+			<a v-show='todoList.length' @click="clearAll">Clear All</a>
+		</footer>
+	</section>
+
+
+	<script type="text/javascript">
+
+		var todoStorage = {
+			storage_key: 'fangfang_todolist_vuelearning2.0',
+
+			fetch: function(){
+				var todos = JSON.parse(localStorage.getItem(this.storage_key) || '[]'); 
+				return todos;
+			},
+
+			save: function(todos){
+				localStorage.setItem(this.storage_key, JSON.stringify(todos));
+			}
+
+		};
+
+		var todovm = new Vue({
+			el: '#todoapp',
+			data: {
+				todoList: todoStorage.fetch(),
+				newTodo: '',
+				filter: 'all' // all, active, completed
+			},
+			computed: {
+				filterList: function(){
+					if(this.filter === 'all'){
+						return this.todoList;
+					}else if(this.filter === 'active'){
+						return this.todoList.filter(function(item){
+							return !item.completed;
+						});
+					}else if(this.filter == 'completed'){
+						return this.todoList.filter(function(item){
+							return item.completed;
+						});
+					}
+				},
+				remaining: function(){
+					return this.todoList.length;
+				}
+			},
+			methods: {
+				addTodo: function(){
+					var value = this.newTodo && this.newTodo.trim();
+					if(!value){
+						return;
+					}
+					var uid = this.todoList.length
+					this.todoList.push({
+						id: uid,
+						title: value,
+						completed: false
+					});
+					this.newTodo = '';
+				},
+				removeItem: function(todo){
+					this.todoList.splice(this.todoList.indexOf(todo), 1);
+				},
+				filterItem: function(filter){
+					this.filter = filter;
+				},
+				clearAll: function(){
+					this.todoList = [];
+				},
+				selectAll:function(checked){
+					this.todoList.forEach(function(item){
+						item.completed = checked;
+					});
+				}
+			},
+			watch: {
+				todoList: function(){
+					todoStorage.save(this.todoList);
+				}
+			}
+		});
+	</script>
+  
+
+</body>
+</html>

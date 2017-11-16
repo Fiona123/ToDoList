@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>v_if</title> 
+	<script type="text/javascript" src="libs/vue.js"></script>
+</head>
+<body>
+	<!-- 
+		v-show显示的结点始终会被渲染，只是不显示时将display属性设置为none
+		v-if是条件渲染，如果不显示时，该结点不会存在于DOM中
+	-->
+	<div id="temp">
+		Using v-if </br>
+		<template v-if="logintype === 'username'">
+			<label>User Name:</label>
+			<input placeholder="Enter your user name" key='user_input'>
+		</template>
+		<template v-else>
+			<label>Email: </label>
+			<input placeholder="Enter your email" key='email_input'>
+		</template> 
+
+		<p v-show="logintype === 'username'">
+		Using v-show
+		</p>
+	</br>
+	 	<button v-on:click='swithType'>Switch</button>  
+	</div>
+
+	<script type="text/javascript"> 
+
+		var vm = new Vue({
+			el: '#temp',
+			data: {
+				logintype: 'email'
+			},
+			methods: {
+				swithType: function(){
+					this.logintype = this.logintype==='username'? 'email':'username';
+				}
+			}
+		}); 
+
+	</script>
+
+</body>
+</html>

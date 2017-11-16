@@ -4,10 +4,10 @@
 	<title>To Do MVC</title> 
 	<script src="libs/vue.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/mystyle.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+
 </head>
-<body class="app"> 
-
-
+<body class="app">  
 	<section id="todoapp">
 		<header class="todoHeader">
 			<h1>todos</h1>
@@ -15,16 +15,23 @@
 		</header> 
 		<section id="main" v-show="todoList.length" >
 			<input :class=['ckbox','ckboxicon2','selectAllCkbox'] type="checkbox" id="selectAll" @change="selectAll($event.target.checked)"></input>
-			<label for="selectAll" ></label>
+			<label for="selectAll" ></label> 
 			<ul class="todolistul">
-				<li v-for="(todo, index) in filterList">
-					<div :class="{'todoitem': true, 'finishitem': todo.completed}">
-						<input :id="index+'checkbox'" :class=['ckbox','ckboxicon1'] type="checkbox" v-model="todo.completed"></input>
-						<label :for="index+'checkbox'"></label>
-						<label>{{todo.title}}</label>
-						<button @click="removeItem(todo)" class="deleteBt">Clear</button>
-					</div>
-				</li>
+				<transition-group name="todolisttrans"    
+				 	tag="p"
+				    v-on:before-enter="beforeEnter"
+				    v-on:enter="enter"
+				    v-on:leave="leave">
+					<li v-for="(todo, index) in filterList" :key="index">
+						<div :class="{'todoitem': true, 'finishitem': todo.completed}">
+							<input :id="index+'checkbox'" :class=['ckbox','ckboxicon1'] type="checkbox" v-model="todo.completed"></input>
+							<label :for="index+'checkbox'"></label>
+							<label>{{todo.title}}</label>
+							<button @click="removeItem(todo)" class="deleteBt">Clear</button>
+						</div>
+					</li>
+				</transition-group>
+				
 			</ul>
 		</section>
 		<footer class="footer" v-show="todoList.length">
@@ -132,7 +139,31 @@
 					this.todoList.forEach(function(item){
 						item.completed = checked;
 					});
-				}
+				},
+				beforeEnter: function (el) {
+				      el.style.opacity = 0
+				      el.style.height = 0
+			    },
+			    enter: function (el, done) {
+				      var delay = el.dataset.index * 150
+				      setTimeout(function () {
+				        Velocity(
+				          el,
+				          { opacity: 1, height: '1.6em' },
+				          { complete: done }
+				        )
+				      }, delay)
+			    },
+			    leave: function (el, done) {
+				      var delay = el.dataset.index * 150
+				      setTimeout(function () {
+				        Velocity(
+				          el,
+				          { opacity: 0, height: 0 },
+				          { complete: done }
+				        )
+				      }, delay)
+			    }
 			},
 			watch: {
 				todoList: function(){

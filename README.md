@@ -6,3 +6,8 @@ Vue Leaning:
 
 1. Vue实现双向绑定的原理： https://www.cnblogs.com/libin-1/p/6893712.html
 
+  Observer: 
+  Watcher:
+  Dep:
+  
+
